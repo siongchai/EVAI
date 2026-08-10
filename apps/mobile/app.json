@@ -35,7 +35,8 @@
         {
           "photosPermission": "Allow EVAi to access your photos for profile and car images."
         }
-      ]
+      ],
+      "expo-sharing"
     ],
     "experiments": {
       "typedRoutes": true

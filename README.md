@@ -14,6 +14,7 @@ AI-powered EV charging analytics.
 
 1. Phase 0 setup: [docs/PHASE0.md](docs/PHASE0.md) (Supabase Auth + profiles)
 2. Phase 1 setup: [docs/PHASE1.md](docs/PHASE1.md) (account + cars)
+3. Phase 2 setup: [docs/PHASE2.md](docs/PHASE2.md) (charging sessions + Excel)
 
 ```bash
 cd apps/mobile

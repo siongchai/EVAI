@@ -13,6 +13,7 @@ import { ErrorText, PrimaryButton } from '@/components/ui';
 import { colors } from '@/constants/theme';
 import { listCars } from '@/lib/cars';
 import { fetchProfile } from '@/lib/profile';
+import { listSessions } from '@/lib/sessions';
 import { publicStorageUrl } from '@/lib/storage';
 import { useAuth } from '@/providers/AuthProvider';
 import type { Profile } from '@/types/database';
@@ -21,6 +22,7 @@ export default function HomeScreen() {
   const { user, signOut } = useAuth();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [carCount, setCarCount] = useState(0);
+  const [sessionCount, setSessionCount] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [signingOut, setSigningOut] = useState(false);
@@ -30,12 +32,14 @@ export default function HomeScreen() {
     setLoading(true);
     setError(null);
     try {
-      const [nextProfile, cars] = await Promise.all([
+      const [nextProfile, cars, sessions] = await Promise.all([
         fetchProfile(user.id),
         listCars(user.id),
+        listSessions(user.id),
       ]);
       setProfile(nextProfile);
       setCarCount(cars.length);
+      setSessionCount(sessions.length);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load account.');
     } finally {
@@ -68,8 +72,7 @@ export default function HomeScreen() {
       <Text style={styles.brand}>EVAi</Text>
       <Text style={styles.title}>Account ready</Text>
       <Text style={styles.body}>
-        Manage your profile and vehicles. Sessions and capture come in the next
-        phases.
+        Manage your profile, vehicles, and charging sessions. Capture comes next.
       </Text>
 
       {loading ? (
@@ -92,7 +95,8 @@ export default function HomeScreen() {
               <Text style={styles.value}>{profile?.full_name || 'Unnamed'}</Text>
               <Text style={styles.label}>{user?.email}</Text>
               <Text style={styles.label}>
-                {carCount} {carCount === 1 ? 'car' : 'cars'}
+                {carCount} {carCount === 1 ? 'car' : 'cars'} · {sessionCount}{' '}
+                {sessionCount === 1 ? 'session' : 'sessions'}
               </Text>
             </View>
           </View>
@@ -113,6 +117,15 @@ export default function HomeScreen() {
           <Text style={styles.navTitle}>Cars</Text>
           <Text style={styles.navBody}>
             Add and manage the EVs on your account.
+          </Text>
+        </Pressable>
+      </Link>
+
+      <Link href="/(app)/sessions" asChild>
+        <Pressable style={styles.navCard}>
+          <Text style={styles.navTitle}>Sessions</Text>
+          <Text style={styles.navBody}>
+            List, edit, and sync charging logs via Excel import/export.
           </Text>
         </Pressable>
       </Link>

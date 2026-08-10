@@ -65,6 +65,45 @@ export function SwitchField({
   );
 }
 
+export function SelectField({
+  label,
+  value,
+  options,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  options: { label: string; value: string }[];
+  onChange: (value: string) => void;
+}) {
+  return (
+    <View style={styles.field}>
+      <Text style={styles.label}>{label}</Text>
+      <View style={styles.selectRow}>
+        {options.map((option) => {
+          const selected = option.value === value;
+          return (
+            <Pressable
+              key={option.value}
+              onPress={() => onChange(option.value)}
+              style={[styles.selectChip, selected && styles.selectChipActive]}
+            >
+              <Text
+                style={[
+                  styles.selectChipText,
+                  selected && styles.selectChipTextActive,
+                ]}
+              >
+                {option.label}
+              </Text>
+            </Pressable>
+          );
+        })}
+      </View>
+    </View>
+  );
+}
+
 export function PrimaryButton({
   label,
   onPress,
@@ -161,6 +200,31 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     marginRight: 12,
+  },
+  selectRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  selectChip: {
+    backgroundColor: colors.inputBackground,
+    borderColor: colors.border,
+    borderRadius: 10,
+    borderWidth: 1,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+  },
+  selectChipActive: {
+    backgroundColor: colors.accentMuted,
+    borderColor: colors.accent,
+  },
+  selectChipText: {
+    color: colors.textMuted,
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  selectChipTextActive: {
+    color: colors.text,
   },
   button: {
     alignItems: 'center',
