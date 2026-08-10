@@ -64,4 +64,4 @@ Signed in as your test user:
 
 ## Next: Phase 2
 
-Charging sessions sync (list, detail, create/edit, Excel import/export).
+See [PHASE2.md](PHASE2.md) — charging sessions sync (list, detail, create/edit, Excel import/export).
