@@ -83,4 +83,4 @@ eas build --platform android --profile preview
 
 ## Next: Phase 1
 
-Account management UI, avatar upload, cars table + CRUD.
+See [PHASE1.md](PHASE1.md) — account management, avatar upload, cars CRUD.

@@ -29,7 +29,13 @@
     },
     "plugins": [
       "expo-router",
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow EVAi to access your photos for profile and car images."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

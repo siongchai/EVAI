@@ -1,50 +1,53 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
   ActivityIndicator,
+  Image,
   Pressable,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
-import { Stack } from 'expo-router';
+import { Link, Stack, useFocusEffect } from 'expo-router';
 
+import { ErrorText, PrimaryButton } from '@/components/ui';
 import { colors } from '@/constants/theme';
-import { getSupabase } from '@/lib/supabase';
+import { listCars } from '@/lib/cars';
+import { fetchProfile } from '@/lib/profile';
+import { publicStorageUrl } from '@/lib/storage';
 import { useAuth } from '@/providers/AuthProvider';
 import type { Profile } from '@/types/database';
 
 export default function HomeScreen() {
   const { user, signOut } = useAuth();
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [carCount, setCarCount] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
   const [signingOut, setSigningOut] = useState(false);
 
-  useEffect(() => {
+  const load = useCallback(async () => {
     if (!user) return;
-
-    let cancelled = false;
-
-    (async () => {
-      const { data, error: profileError } = await getSupabase()
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .maybeSingle();
-
-      if (cancelled) return;
-
-      if (profileError) {
-        setError(profileError.message);
-        return;
-      }
-
-      setProfile(data);
-    })();
-
-    return () => {
-      cancelled = true;
-    };
+    setLoading(true);
+    setError(null);
+    try {
+      const [nextProfile, cars] = await Promise.all([
+        fetchProfile(user.id),
+        listCars(user.id),
+      ]);
+      setProfile(nextProfile);
+      setCarCount(cars.length);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load account.');
+    } finally {
+      setLoading(false);
+    }
   }, [user]);
+
+  useFocusEffect(
+    useCallback(() => {
+      void load();
+    }, [load]),
+  );
 
   async function handleSignOut() {
     setSigningOut(true);
@@ -57,43 +60,71 @@ export default function HomeScreen() {
     }
   }
 
+  const avatarUrl = publicStorageUrl('avatars', profile?.avatar_path);
+
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ title: 'Home' }} />
       <Text style={styles.brand}>EVAi</Text>
-      <Text style={styles.title}>Phase 0 shell</Text>
+      <Text style={styles.title}>Account ready</Text>
       <Text style={styles.body}>
-        Web, iOS, and Android share this Expo app. Auth and profile loading are
-        wired to Supabase.
+        Manage your profile and vehicles. Sessions and capture come in the next
+        phases.
       </Text>
 
-      <View style={styles.card}>
-        <Text style={styles.label}>Signed in as</Text>
-        <Text style={styles.value}>{user?.email ?? '—'}</Text>
-        <Text style={[styles.label, styles.spacer]}>Profile name</Text>
-        {profile ? (
-          <Text style={styles.value}>{profile.full_name || 'Unnamed'}</Text>
-        ) : error ? (
-          <Text style={styles.error}>{error}</Text>
-        ) : (
-          <ActivityIndicator color={colors.accent} />
-        )}
-      </View>
+      {loading ? (
+        <ActivityIndicator color={colors.accent} />
+      ) : (
+        <View style={styles.card}>
+          <View style={styles.row}>
+            {avatarUrl ? (
+              <Image source={{ uri: avatarUrl }} style={styles.avatar} />
+            ) : (
+              <View style={[styles.avatar, styles.avatarPlaceholder]}>
+                <Text style={styles.avatarLetter}>
+                  {(profile?.full_name || user?.email || '?')
+                    .charAt(0)
+                    .toUpperCase()}
+                </Text>
+              </View>
+            )}
+            <View style={styles.meta}>
+              <Text style={styles.value}>{profile?.full_name || 'Unnamed'}</Text>
+              <Text style={styles.label}>{user?.email}</Text>
+              <Text style={styles.label}>
+                {carCount} {carCount === 1 ? 'car' : 'cars'}
+              </Text>
+            </View>
+          </View>
+        </View>
+      )}
 
-      <Pressable
-        disabled={signingOut}
+      <Link href="/(app)/account" asChild>
+        <Pressable style={styles.navCard}>
+          <Text style={styles.navTitle}>Account</Text>
+          <Text style={styles.navBody}>
+            Edit name, avatar, password, or delete account.
+          </Text>
+        </Pressable>
+      </Link>
+
+      <Link href="/(app)/cars" asChild>
+        <Pressable style={styles.navCard}>
+          <Text style={styles.navTitle}>Cars</Text>
+          <Text style={styles.navBody}>
+            Add and manage the EVs on your account.
+          </Text>
+        </Pressable>
+      </Link>
+
+      <ErrorText message={error} />
+
+      <PrimaryButton
+        label="Sign out"
+        tone="muted"
+        loading={signingOut}
         onPress={handleSignOut}
-        style={({ pressed }) => [
-          styles.button,
-          (pressed || signingOut) && styles.buttonPressed,
-        ]}
-      >
-        {signingOut ? (
-          <ActivityIndicator color={colors.text} />
-        ) : (
-          <Text style={styles.buttonText}>Sign out</Text>
-        )}
-      </Pressable>
+      />
     </View>
   );
 }
@@ -104,7 +135,6 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: 16,
     padding: 24,
-    paddingTop: 64,
   },
   brand: {
     color: colors.accent,
@@ -126,41 +156,57 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     borderRadius: 16,
     borderWidth: 1,
-    gap: 8,
-    marginTop: 8,
-    padding: 20,
+    padding: 16,
+  },
+  row: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 14,
+  },
+  avatar: {
+    borderRadius: 28,
+    height: 56,
+    width: 56,
+  },
+  avatarPlaceholder: {
+    alignItems: 'center',
+    backgroundColor: colors.surfaceElevated,
+    justifyContent: 'center',
+  },
+  avatarLetter: {
+    color: colors.text,
+    fontSize: 22,
+    fontWeight: '700',
+  },
+  meta: {
+    flex: 1,
+    gap: 4,
   },
   label: {
     color: colors.textMuted,
-    fontSize: 13,
-    textTransform: 'uppercase',
+    fontSize: 14,
   },
   value: {
     color: colors.text,
     fontSize: 18,
-    fontWeight: '600',
-  },
-  spacer: {
-    marginTop: 12,
-  },
-  error: {
-    color: colors.danger,
-  },
-  button: {
-    alignItems: 'center',
-    backgroundColor: colors.surfaceElevated,
-    borderColor: colors.border,
-    borderRadius: 12,
-    borderWidth: 1,
-    marginTop: 'auto',
-    paddingVertical: 14,
-  },
-  buttonPressed: {
-    opacity: 0.85,
-  },
-  buttonText: {
-    color: colors.text,
-    fontSize: 16,
     fontWeight: '700',
+  },
+  navCard: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: 16,
+    borderWidth: 1,
+    gap: 6,
+    padding: 16,
+  },
+  navTitle: {
+    color: colors.accent,
+    fontSize: 18,
+    fontWeight: '700',
+  },
+  navBody: {
+    color: colors.textMuted,
+    fontSize: 14,
+    lineHeight: 20,
   },
 });

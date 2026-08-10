@@ -10,9 +10,10 @@ AI-powered EV charging analytics.
 | `EVAi2` | Legacy SwiftUI iOS app — product reference |
 | `supabase/` | Database migrations |
 
-## Quick start (Phase 0)
+## Quick start
 
-See [docs/PHASE0.md](docs/PHASE0.md).
+1. Phase 0 setup: [docs/PHASE0.md](docs/PHASE0.md) (Supabase Auth + profiles)
+2. Phase 1 setup: [docs/PHASE1.md](docs/PHASE1.md) (account + cars)
 
 ```bash
 cd apps/mobile
@@ -24,6 +25,6 @@ npm run web
 ## Stack
 
 - **Client:** Expo + Expo Router
-- **Auth / DB:** Supabase
+- **Auth / DB / Storage:** Supabase
 - **Web host:** Vercel
 - **Native builds:** EAS
