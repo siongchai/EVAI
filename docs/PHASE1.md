@@ -10,12 +10,15 @@ Profile management, avatar upload, password change, account delete, and cars CRU
 ## 1. Run the Phase 1 migration
 
 1. Open Supabase → **SQL** → **SQL Editor** → New query.
-2. Paste all of:
+2. Paste and run these in order:
    - `supabase/migrations/20260810100000_cars_and_storage.sql`
+   - `supabase/migrations/20260810110000_cars_grants.sql`
 3. Click **Run** (safe to re-run; policies are dropped/recreated).
 4. Confirm:
    - **Table Editor** → `cars` exists
    - **Storage** → buckets `avatars` and `cars` exist
+
+If saving a car fails with `permission denied for table cars`, run the grants migration (`..._cars_grants.sql`) — the table can exist while API roles still lack privileges.
 
 ## 2. Restart the app
 

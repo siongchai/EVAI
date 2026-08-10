@@ -97,7 +97,13 @@ export function CarForm({
         imageUri,
       });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not save car.');
+      const message =
+        err && typeof err === 'object' && 'message' in err
+          ? String((err as { message: unknown }).message)
+          : err instanceof Error
+            ? err.message
+            : 'Could not save car.';
+      setError(message || 'Could not save car.');
     } finally {
       setSaving(false);
     }

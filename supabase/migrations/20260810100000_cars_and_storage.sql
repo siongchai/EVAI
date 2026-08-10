@@ -22,6 +22,10 @@ create table if not exists public.cars (
 create index if not exists cars_user_id_idx on public.cars (user_id);
 create index if not exists cars_user_primary_idx on public.cars (user_id, is_primary);
 
+grant usage on schema public to anon, authenticated;
+grant select, insert, update, delete on table public.cars to authenticated;
+grant select on table public.cars to anon;
+
 alter table public.cars enable row level security;
 
 drop policy if exists "Users can view own cars" on public.cars;

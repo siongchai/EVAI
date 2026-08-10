@@ -15,7 +15,8 @@ Expo app for web + iOS + Android, Supabase Auth, Vercel web deploy prep.
 1. Go to [https://supabase.com](https://supabase.com) → New project.
 2. Auth → Providers → enable **Email**.
 3. For local/dev speed, Auth → Providers → Email → disable **Confirm email** (re-enable before production).
-4. SQL Editor → paste and run `supabase/migrations/20260810000000_profiles.sql`.
+4. SQL Editor → paste and run `supabase/migrations/20260810000000_profiles.sql`
+   (includes grants for `authenticated` / `anon`).
 5. Project Settings → API → copy **Project URL** and **anon public** key.
 
 ## 2. Configure the Expo app

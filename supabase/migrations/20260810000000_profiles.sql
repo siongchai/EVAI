@@ -8,6 +8,10 @@ create table if not exists public.profiles (
   updated_at timestamptz not null default timezone('utc', now())
 );
 
+grant usage on schema public to anon, authenticated;
+grant select, insert, update, delete on table public.profiles to authenticated;
+grant select on table public.profiles to anon;
+
 alter table public.profiles enable row level security;
 
 create policy "Users can view own profile"
