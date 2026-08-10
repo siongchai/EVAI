@@ -6,20 +6,104 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		A00100B12FDE900000B9C5E2 /* EVAi2Widget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A00100A12FDE900000B9C5E2 /* EVAi2Widget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A00100C12FDE900000B9C5E2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 59DEDADA2FDE83DD00B9C5E2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A00100912FDE900000B9C5E2;
+			remoteInfo = EVAi2Widget;
+		};
+		B00100C12FDE900000B9C5E2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 59DEDADA2FDE83DD00B9C5E2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 59DEDAE12FDE83DD00B9C5E2;
+			remoteInfo = EVAi2;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A00100D12FDE900000B9C5E2 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				A00100B12FDE900000B9C5E2 /* EVAi2Widget.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		59DEDAE22FDE83DD00B9C5E2 /* EVAi2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EVAi2.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A00100A12FDE900000B9C5E2 /* EVAi2Widget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = EVAi2Widget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		B00100A12FDE900000B9C5E2 /* EVAi2Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EVAi2Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		A00101012FDE900000B9C5E2 /* Exceptions for "EVAi2Widget" folder in "EVAi2Widget" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = A00100912FDE900000B9C5E2 /* EVAi2Widget */;
+		};
+		A00101022FDE900000B9C5E2 /* Exceptions for "EVAi2" folder in "EVAi2" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 59DEDAE12FDE83DD00B9C5E2 /* EVAi2 */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		59DEDAE42FDE83DD00B9C5E2 /* EVAi2 */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				A00101022FDE900000B9C5E2 /* Exceptions for "EVAi2" folder in "EVAi2" target */,
+			);
 			path = EVAi2;
+			sourceTree = "<group>";
+		};
+		A00100A22FDE900000B9C5E2 /* EVAi2Widget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				A00101012FDE900000B9C5E2 /* Exceptions for "EVAi2Widget" folder in "EVAi2Widget" target */,
+			);
+			path = EVAi2Widget;
+			sourceTree = "<group>";
+		};
+		B00100A22FDE900000B9C5E2 /* EVAi2Tests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = EVAi2Tests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		59DEDADF2FDE83DD00B9C5E2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A00100A52FDE900000B9C5E2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B00100A52FDE900000B9C5E2 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -33,6 +117,8 @@
 			isa = PBXGroup;
 			children = (
 				59DEDAE42FDE83DD00B9C5E2 /* EVAi2 */,
+				A00100A22FDE900000B9C5E2 /* EVAi2Widget */,
+				B00100A22FDE900000B9C5E2 /* EVAi2Tests */,
 				59DEDAE32FDE83DD00B9C5E2 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,6 +127,8 @@
 			isa = PBXGroup;
 			children = (
 				59DEDAE22FDE83DD00B9C5E2 /* EVAi2.app */,
+				A00100A12FDE900000B9C5E2 /* EVAi2Widget.appex */,
+				B00100A12FDE900000B9C5E2 /* EVAi2Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -55,10 +143,12 @@
 				59DEDADE2FDE83DD00B9C5E2 /* Sources */,
 				59DEDADF2FDE83DD00B9C5E2 /* Frameworks */,
 				59DEDAE02FDE83DD00B9C5E2 /* Resources */,
+				A00100D12FDE900000B9C5E2 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				A00100E12FDE900000B9C5E2 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				59DEDAE42FDE83DD00B9C5E2 /* EVAi2 */,
@@ -69,6 +159,51 @@
 			productName = EVAi2;
 			productReference = 59DEDAE22FDE83DD00B9C5E2 /* EVAi2.app */;
 			productType = "com.apple.product-type.application";
+		};
+		A00100912FDE900000B9C5E2 /* EVAi2Widget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A00100F12FDE900000B9C5E2 /* Build configuration list for PBXNativeTarget "EVAi2Widget" */;
+			buildPhases = (
+				A00100A32FDE900000B9C5E2 /* Sources */,
+				A00100A52FDE900000B9C5E2 /* Frameworks */,
+				A00100A62FDE900000B9C5E2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				A00100A22FDE900000B9C5E2 /* EVAi2Widget */,
+			);
+			name = EVAi2Widget;
+			packageProductDependencies = (
+			);
+			productName = EVAi2Widget;
+			productReference = A00100A12FDE900000B9C5E2 /* EVAi2Widget.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		B00100912FDE900000B9C5E2 /* EVAi2Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B00100F12FDE900000B9C5E2 /* Build configuration list for PBXNativeTarget "EVAi2Tests" */;
+			buildPhases = (
+				B00100A32FDE900000B9C5E2 /* Sources */,
+				B00100A52FDE900000B9C5E2 /* Frameworks */,
+				B00100A62FDE900000B9C5E2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B00100E12FDE900000B9C5E2 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				B00100A22FDE900000B9C5E2 /* EVAi2Tests */,
+			);
+			name = EVAi2Tests;
+			packageProductDependencies = (
+			);
+			productName = EVAi2Tests;
+			productReference = B00100A12FDE900000B9C5E2 /* EVAi2Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -82,6 +217,13 @@
 				TargetAttributes = {
 					59DEDAE12FDE83DD00B9C5E2 = {
 						CreatedOnToolsVersion = 26.5;
+					};
+					A00100912FDE900000B9C5E2 = {
+						CreatedOnToolsVersion = 26.5;
+					};
+					B00100912FDE900000B9C5E2 = {
+						CreatedOnToolsVersion = 26.5;
+						TestTargetID = 59DEDAE12FDE83DD00B9C5E2;
 					};
 				};
 			};
@@ -100,12 +242,28 @@
 			projectRoot = "";
 			targets = (
 				59DEDAE12FDE83DD00B9C5E2 /* EVAi2 */,
+				A00100912FDE900000B9C5E2 /* EVAi2Widget */,
+				B00100912FDE900000B9C5E2 /* EVAi2Tests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		59DEDAE02FDE83DD00B9C5E2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A00100A62FDE900000B9C5E2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B00100A62FDE900000B9C5E2 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -122,7 +280,34 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A00100A32FDE900000B9C5E2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B00100A32FDE900000B9C5E2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A00100E12FDE900000B9C5E2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A00100912FDE900000B9C5E2 /* EVAi2Widget */;
+			targetProxy = A00100C12FDE900000B9C5E2 /* PBXContainerItemProxy */;
+		};
+		B00100E12FDE900000B9C5E2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 59DEDAE12FDE83DD00B9C5E2 /* EVAi2 */;
+			targetProxy = B00100C12FDE900000B9C5E2 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		59DEDAEB2FDE83DF00B9C5E2 /* Debug */ = {
@@ -178,7 +363,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -236,7 +421,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -251,11 +436,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = EVAi2/EVAi2.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2MMLRV4STX;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = EVAi2/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "EVAi needs camera access to capture charging session photos.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "EVAi needs photo library access to upload charging session images.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -283,11 +472,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = EVAi2/EVAi2.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2MMLRV4STX;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = EVAi2/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "EVAi needs camera access to capture charging session photos.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "EVAi needs photo library access to upload charging session images.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -310,6 +503,94 @@
 			};
 			name = Release;
 		};
+		A00100F22FDE900000B9C5E2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = EVAi2Widget/EVAi2Widget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2MMLRV4STX;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = EVAi2Widget/Info.plist;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = sg.tsc.EVAi2.EVAi2Widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A00100F32FDE900000B9C5E2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = EVAi2Widget/EVAi2Widget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2MMLRV4STX;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = EVAi2Widget/Info.plist;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = sg.tsc.EVAi2.EVAi2Widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		B00100F22FDE900000B9C5E2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2MMLRV4STX;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = sg.tsc.EVAi2Tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EVAi2.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/EVAi2";
+			};
+			name = Debug;
+		};
+		B00100F32FDE900000B9C5E2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2MMLRV4STX;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = sg.tsc.EVAi2Tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EVAi2.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/EVAi2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -327,6 +608,24 @@
 			buildConfigurations = (
 				59DEDAEE2FDE83DF00B9C5E2 /* Debug */,
 				59DEDAEF2FDE83DF00B9C5E2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A00100F12FDE900000B9C5E2 /* Build configuration list for PBXNativeTarget "EVAi2Widget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A00100F22FDE900000B9C5E2 /* Debug */,
+				A00100F32FDE900000B9C5E2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B00100F12FDE900000B9C5E2 /* Build configuration list for PBXNativeTarget "EVAi2Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B00100F22FDE900000B9C5E2 /* Debug */,
+				B00100F32FDE900000B9C5E2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

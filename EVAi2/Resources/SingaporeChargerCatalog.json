@@ -1,0 +1,232 @@
+{
+  "version": 1,
+  "source": "excel-heuristics",
+  "updatedAt": "2026-06-24",
+  "entries": [
+    {
+      "id": "excel-3",
+      "name": "HDB Blk 462A MSCP C20M, Deck 3A",
+      "address": "HDB Blk 462A MSCP C20M, Deck 3A",
+      "operator": "Charge+",
+      "networkAliases": [
+        "Charge+",
+        "SP Group",
+        "SPGroup"
+      ],
+      "position": "",
+      "connectorIds": [
+        "SG24KA9AHH"
+      ],
+      "plugType": "Type 2",
+      "powerRating": "AC",
+      "chargingSpeedKW": 7.4
+    },
+    {
+      "id": "excel-4",
+      "name": "ORTO West Coast",
+      "address": "ORTO West Coast",
+      "operator": "Charge+",
+      "networkAliases": [
+        "Charge+",
+        "SP Group",
+        "SPGroup"
+      ],
+      "position": "",
+      "connectorIds": [
+        "SG24KBVMQ0"
+      ],
+      "plugType": "CCS",
+      "powerRating": "DC",
+      "chargingSpeedKW": 50.0
+    },
+    {
+      "id": "excel-6",
+      "name": "HDB Blk 81 SCP TE28",
+      "address": "HDB Blk 81 SCP TE28",
+      "operator": "Charge+",
+      "networkAliases": [
+        "Charge+",
+        "SP Group",
+        "SPGroup"
+      ],
+      "position": "",
+      "connectorIds": [
+        "SG24KN3ATI"
+      ],
+      "plugType": "Type 2",
+      "powerRating": "AC",
+      "chargingSpeedKW": 7.4
+    },
+    {
+      "id": "excel-9",
+      "name": "Alexandra Retail Centre (ARC) L3",
+      "address": "Alexandra Retail Centre (ARC) L3",
+      "operator": "Charge+",
+      "networkAliases": [
+        "Charge+",
+        "SP Group",
+        "SPGroup"
+      ],
+      "position": "",
+      "connectorIds": [
+        "SG24KUWQ2J"
+      ],
+      "plugType": "CCS",
+      "powerRating": "DC",
+      "chargingSpeedKW": 50.0
+    },
+    {
+      "id": "excel-14",
+      "name": "HDB Blk 8C MSCP BTM2, Deck 3B",
+      "address": "HDB Blk 8C MSCP BTM2, Deck 3B",
+      "operator": "Charge+",
+      "networkAliases": [
+        "Charge+",
+        "SP Group",
+        "SPGroup"
+      ],
+      "position": "",
+      "connectorIds": [
+        "SG24LAR7P5"
+      ],
+      "plugType": "Type 2",
+      "powerRating": "AC",
+      "chargingSpeedKW": 7.4
+    },
+    {
+      "id": "excel-34",
+      "name": "Mapletree Business City 1 (MBC1)",
+      "address": "Mapletree Business City 1 (MBC1)",
+      "operator": "Charge+",
+      "networkAliases": [
+        "Charge+",
+        "SP Group",
+        "SPGroup"
+      ],
+      "position": "",
+      "connectorIds": [
+        "SG25AR6RCZ"
+      ],
+      "plugType": "CCS",
+      "powerRating": "DC",
+      "chargingSpeedKW": 50.0
+    },
+    {
+      "id": "excel-37",
+      "name": "HDB Blk 124 SCP AV1 (Alexandra Village)",
+      "address": "HDB Blk 124 SCP AV1 (Alexandra Village)",
+      "operator": "Charge+",
+      "networkAliases": [
+        "Charge+",
+        "SP Group",
+        "SPGroup"
+      ],
+      "position": "",
+      "connectorIds": [
+        "SG25B6ZRB2"
+      ],
+      "plugType": "Type 2",
+      "powerRating": "AC",
+      "chargingSpeedKW": 7.4
+    },
+    {
+      "id": "excel-53",
+      "name": "VivoCity Multistorey Carpark",
+      "address": "VivoCity Multistorey Carpark",
+      "operator": "Charge+",
+      "networkAliases": [
+        "Charge+",
+        "SP Group",
+        "SPGroup"
+      ],
+      "position": "",
+      "connectorIds": [
+        "SG25CEB9MP"
+      ],
+      "plugType": "CCS",
+      "powerRating": "DC",
+      "chargingSpeedKW": 50.0
+    },
+    {
+      "id": "excel-121",
+      "name": "Verandah Residences, 225 Pasir Panjang Rd, Singapore 117370",
+      "address": "Verandah Residences, 225 Pasir Panjang Rd, Singapore 117370",
+      "operator": "MNL",
+      "networkAliases": [
+        "MNL"
+      ],
+      "position": "",
+      "connectorIds": [],
+      "plugType": "Type 2",
+      "powerRating": "AC",
+      "chargingSpeedKW": 7.4
+    },
+    {
+      "id": "excel-142",
+      "name": "HDB Blk 8C MSCP BTM2, Deck 3B, Lot 189",
+      "address": "HDB Blk 8C MSCP BTM2, Deck 3B, Lot 189",
+      "operator": "Charge+",
+      "networkAliases": [
+        "Charge+",
+        "SP Group",
+        "SPGroup"
+      ],
+      "position": "",
+      "connectorIds": [],
+      "plugType": "Type 2",
+      "powerRating": "AC",
+      "chargingSpeedKW": 7.4
+    }
+  ],
+  "networkDefaults": [
+    {
+      "networkAliases": [
+        "Charge+",
+        "SP Group",
+        "SPGroup"
+      ],
+      "locationKeywords": [
+        "hdb",
+        "mscp",
+        "scp",
+        "carpark"
+      ],
+      "plugType": "Type 2",
+      "powerRating": "AC",
+      "chargingSpeedKW": 7.4
+    },
+    {
+      "networkAliases": [
+        "Charge+",
+        "SP Group",
+        "SPGroup"
+      ],
+      "locationKeywords": [
+        "orto",
+        "shell",
+        "mall",
+        "centre",
+        "center",
+        "business",
+        "hub",
+        "vivo"
+      ],
+      "plugType": "CCS",
+      "powerRating": "DC",
+      "chargingSpeedKW": 50.0
+    },
+    {
+      "networkAliases": [
+        "MNL"
+      ],
+      "locationKeywords": [
+        "verandah",
+        "residence",
+        "condo"
+      ],
+      "plugType": "Type 2",
+      "powerRating": "AC",
+      "chargingSpeedKW": 7.4
+    }
+  ]
+}
