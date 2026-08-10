@@ -1,0 +1,11 @@
+{
+  "name": "evai",
+  "private": true,
+  "scripts": {
+    "mobile": "npm --prefix apps/mobile start",
+    "mobile:web": "npm --prefix apps/mobile run web",
+    "mobile:ios": "npm --prefix apps/mobile run ios",
+    "mobile:android": "npm --prefix apps/mobile run android",
+    "mobile:typecheck": "npm --prefix apps/mobile run typecheck"
+  }
+}
