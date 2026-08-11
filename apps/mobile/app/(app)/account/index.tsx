@@ -248,6 +248,14 @@ export default function AccountScreen() {
                 </Text>
               </Pressable>
             </Link>
+            <Link href="/(app)/account/notifications" asChild>
+              <Pressable style={styles.linkCard}>
+                <Text style={styles.linkTitle}>Notifications</Text>
+                <Text style={styles.linkBody}>
+                  Monthly charging summary reminders on iOS and Android.
+                </Text>
+              </Pressable>
+            </Link>
           </View>
 
           <View style={styles.section}>

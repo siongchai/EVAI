@@ -29,6 +29,7 @@ import {
   formatSessionWhen,
   listSessions,
 } from '@/lib/sessions';
+import { syncHomeScreenWidgets } from '@/lib/widgets/sync';
 import { useAuth } from '@/providers/AuthProvider';
 import type { ChargingSession } from '@/types/database';
 
@@ -53,6 +54,7 @@ export default function HomeScreen() {
       ]);
       setGreetingName(profile?.full_name?.trim() || 'there');
       setSessions(nextSessions);
+      syncHomeScreenWidgets(nextSessions);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load dashboard.');
     } finally {

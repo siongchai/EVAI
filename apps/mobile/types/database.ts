@@ -14,6 +14,8 @@ export type Database = {
           id: string;
           full_name: string;
           avatar_path: string | null;
+          expo_push_token: string | null;
+          notifications_enabled: boolean;
           created_at: string;
           updated_at: string;
         };
@@ -21,6 +23,8 @@ export type Database = {
           id: string;
           full_name?: string;
           avatar_path?: string | null;
+          expo_push_token?: string | null;
+          notifications_enabled?: boolean;
           created_at?: string;
           updated_at?: string;
         };
@@ -28,6 +32,8 @@ export type Database = {
           id?: string;
           full_name?: string;
           avatar_path?: string | null;
+          expo_push_token?: string | null;
+          notifications_enabled?: boolean;
           created_at?: string;
           updated_at?: string;
         };

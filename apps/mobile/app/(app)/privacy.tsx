@@ -18,7 +18,11 @@ const SECTIONS = [
   },
   {
     title: 'Permissions',
-    body: 'EVAi may request photo library or camera access to capture receipts and profile/car images, and file access to import or export Excel charging logs. These permissions are optional for basic account use.',
+    body: 'EVAi may request photo library or camera access to capture receipts and profile/car images, file access to import or export Excel charging logs, and notification permission for optional monthly charging reminders on iOS/Android. These permissions are optional for basic account use.',
+  },
+  {
+    title: 'Widgets & notifications',
+    body: 'On iOS builds, home-screen widgets show monthly cost/energy and your last session using data already stored in your account. Optional push tokens may be saved on your profile when you enable notifications so a future server reminder can reach your device.',
   },
   {
     title: 'Sharing & third parties',

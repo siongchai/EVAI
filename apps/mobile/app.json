@@ -23,19 +23,27 @@
         "NSPrivacyAccessedAPITypes": [
           {
             "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryUserDefaults",
-            "NSPrivacyAccessedAPITypeReasons": ["CA92.1"]
+            "NSPrivacyAccessedAPITypeReasons": [
+              "CA92.1"
+            ]
           },
           {
             "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryFileTimestamp",
-            "NSPrivacyAccessedAPITypeReasons": ["C617.1"]
+            "NSPrivacyAccessedAPITypeReasons": [
+              "C617.1"
+            ]
           },
           {
             "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategorySystemBootTime",
-            "NSPrivacyAccessedAPITypeReasons": ["35F9.1"]
+            "NSPrivacyAccessedAPITypeReasons": [
+              "35F9.1"
+            ]
           },
           {
             "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryDiskSpace",
-            "NSPrivacyAccessedAPITypeReasons": ["E174.1"]
+            "NSPrivacyAccessedAPITypeReasons": [
+              "E174.1"
+            ]
           }
         ]
       }
@@ -78,7 +86,35 @@
         }
       ],
       "expo-document-picker",
-      "expo-sharing"
+      "expo-sharing",
+      [
+        "expo-notifications",
+        {
+          "color": "#00A3FF",
+          "defaultChannel": "monthly-summary"
+        }
+      ],
+      [
+        "expo-widgets",
+        {
+          "bundleIdentifier": "sg.tsc.EVAi2.widgets",
+          "groupIdentifier": "group.sg.tsc.EVAi2",
+          "widgets": [
+            {
+              "name": "MonthlySummaryWidget",
+              "displayName": "Monthly Summary",
+              "description": "Monthly EV charging cost and energy usage.",
+              "supportedFamilies": ["systemSmall", "systemMedium"]
+            },
+            {
+              "name": "LastSessionWidget",
+              "displayName": "Last Session",
+              "description": "Your most recent charging session.",
+              "supportedFamilies": ["systemSmall", "systemMedium"]
+            }
+          ]
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

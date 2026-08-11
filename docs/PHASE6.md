@@ -1,19 +1,10 @@
-# Phase 6 — AI settings + legacy migrate
+# Phase 6 — Polish: AI settings, migrate, widgets, notifications
 
-Optional follow-up after Phase 5 ship readiness. This slice covers the highest-value cross-platform items:
+Optional follow-up after Phase 5 ship readiness.
 
-1. **In-app AI provider settings**
-2. **Swift → cloud migrate helper** (Excel + JSON)
+## Delivered
 
-Deferred for later slices: home-screen widgets, push notifications, Apple Intelligence native bridge.
-
-## Prerequisites
-
-- Phases 0–4 verified locally
-- Phase 5 shipping config recommended (Edge Function for production Capture)
-
-## 1. AI Settings
-
+### 6.1 AI Settings
 Screen: `Account → AI Settings` (`/(app)/account/ai-settings`)
 
 - Preferred provider: **OpenAI** or **Claude**
@@ -21,44 +12,48 @@ Screen: `Account → AI Settings` (`/(app)/account/ai-settings`)
 - Capture shows the active engine and links back to AI Settings
 - Edge Function + local extract proxy accept `preferredProvider` when both server keys exist
 
-### Client resolution order
-
-1. Edge Function when `EXPO_PUBLIC_USE_EDGE_EXTRACTION=1`
-2. Web → local extract proxy (`npm run extract-proxy`)
-3. Native → preferred stored/env key, then the other provider, then proxy
-
-Do **not** ship browser AI keys in production — use the Edge Function.
-
-## 2. Migrate from legacy EVAi
-
+### 6.2 Migrate from legacy EVAi
 Screen: `Account → Migrate from EVAi (legacy)` (`/(app)/account/migrate`)
 
-From the original Swift app, export:
+Import Excel (`.xlsx`) or Swift JSON (`ExportService.exportJSON`) into Supabase.
+Sample: `apps/mobile/lib/migrate/swiftJson.test-data.json`
 
-- **Excel** (same workbook format as Sessions → Import), or
-- **JSON** (`ExportService.exportJSON` → `{ sessions: [...] }` camelCase)
+### 6.3 iOS home-screen widgets
+Uses `expo-widgets` (dev/EAS builds — not Expo Go):
 
-Then in the Expo app:
+| Widget | Kind | Shows |
+|--------|------|--------|
+| Monthly Summary | `MonthlySummaryWidget` | Month label, cost (SGD), energy |
+| Last Session | `LastSessionWidget` | Location, cost, energy, date |
 
-1. Open Migrate
-2. Choose the file
-3. Preview insert/update/skip counts
-4. Import into Supabase (linked to your primary car when present)
+- App Group: `group.sg.tsc.EVAi2` (same as legacy Swift widgets)
+- Synced from Home load and after session create/update/delete/import
+- Web/Android use no-op stubs so `ship:check` still passes
 
-Not migrated: local photos, Keychain AI keys, widgets, SwiftData profile UUID.
+### 6.4 Notifications
+Screen: `Account → Notifications`
 
-Sample JSON for smoke tests: `apps/mobile/lib/migrate/swiftJson.test-data.json`
+- Local **monthly summary** reminder (1st of month, 09:00) on iOS/Android
+- Optional Expo push token stored on `profiles.expo_push_token` when EAS `projectId` is real
+- Migration: `supabase/migrations/20260811000000_profile_push_tokens.sql`
+
+## Prerequisites
+
+- Phases 0–5 on `main`
+- Apply the push-token migration in Supabase SQL editor / CLI
+- For widgets + push on device: `eas init` (real projectId) + preview/dev build
 
 ## Phase 6 done when
 
 - [ ] AI Settings saves preferred provider + keys
 - [ ] Capture status reflects Edge / proxy / OpenAI / Claude
-- [ ] Preferred provider is honored by proxy/Edge when both secrets exist
-- [ ] Excel migrate preview + import works
-- [ ] Swift JSON migrate preview + import works (duplicates skipped)
+- [ ] Excel + Swift JSON migrate work
+- [ ] Widgets appear in iOS gallery after a new native build
+- [ ] Home/session edits refresh widget snapshots
+- [ ] Notifications toggle schedules/cancels monthly local reminder
+- [ ] Push-token migration applied (optional until you want remote push)
 
-## Later (Phase 6+)
+## Still deferred
 
-- iOS widgets (`expo-widgets`) mirroring Monthly Summary / Last Session
-- Push tokens + monthly summary notifications
 - Apple Intelligence Expo Module (iOS 26+, OCR-fusion dependent)
+- Server-driven remote push campaigns (token storage is ready; Edge sender not required yet)

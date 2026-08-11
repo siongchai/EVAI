@@ -18,7 +18,7 @@ AI-powered EV charging analytics for **web, iOS, and Android**.
 4. [Phase 3](docs/PHASE3.md) — Capture / AI extraction  
 5. [Phase 4](docs/PHASE4.md) — Home + Analytics  
 6. [Phase 5](docs/PHASE5.md) — Ship (Vercel + EAS)  
-7. [Phase 6](docs/PHASE6.md) — AI settings + legacy migrate
+7. [Phase 6](docs/PHASE6.md) — AI settings, migrate, widgets, notifications
 
 ## Local quick start
 

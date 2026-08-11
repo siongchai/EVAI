@@ -1,9 +1,19 @@
 import { getSupabase } from '@/lib/supabase';
+import { syncHomeScreenWidgets } from '@/lib/widgets/sync';
 import type {
   ChargingSession,
   ChargingSessionInsert,
   ChargingSessionUpdate,
 } from '@/types/database';
+
+async function refreshWidgetsForUser(userId: string): Promise<void> {
+  try {
+    const sessions = await listSessions(userId);
+    syncHomeScreenWidgets(sessions);
+  } catch (error) {
+    console.warn('Widget refresh failed', error);
+  }
+}
 
 export async function listSessions(userId: string): Promise<ChargingSession[]> {
   const { data, error } = await getSupabase()
@@ -39,6 +49,7 @@ export async function createSession(
     .single();
 
   if (error) throw error;
+  await refreshWidgetsForUser(input.user_id);
   return data;
 }
 
@@ -53,6 +64,8 @@ export async function createSessions(
     .select('*');
 
   if (error) throw error;
+  const userId = inputs[0]?.user_id;
+  if (userId) await refreshWidgetsForUser(userId);
   return data ?? [];
 }
 
@@ -68,16 +81,19 @@ export async function updateSession(
     .single();
 
   if (error) throw error;
+  if (data?.user_id) await refreshWidgetsForUser(data.user_id);
   return data;
 }
 
 export async function deleteSession(sessionId: string): Promise<void> {
+  const existing = await getSession(sessionId);
   const { error } = await getSupabase()
     .from('charging_sessions')
     .delete()
     .eq('id', sessionId);
 
   if (error) throw error;
+  if (existing?.user_id) await refreshWidgetsForUser(existing.user_id);
 }
 
 export function parseOptionalNumber(value: string): number {
