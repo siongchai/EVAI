@@ -8,13 +8,20 @@ import {
   Text,
   View,
 } from 'react-native';
-import { Stack, useRouter } from 'expo-router';
+import { Link, Stack, useRouter } from 'expo-router';
 
 import { SessionForm } from '@/components/SessionForm';
 import { ErrorText, PrimaryButton, SuccessText } from '@/components/ui';
 import { colors } from '@/constants/theme';
+import {
+  resolveExtractionRuntime,
+  type ExtractionRuntime,
+} from '@/lib/aiSettings';
 import { listCars } from '@/lib/cars';
-import { extractSessionFromImageUris, isExtractionConfigured } from '@/lib/extraction/extract';
+import {
+  extractSessionFromImageUris,
+  isExtractionConfigured,
+} from '@/lib/extraction/extract';
 import {
   formatConfidence,
   mapExtractionToSessionDraft,
@@ -35,6 +42,7 @@ export default function CaptureSessionScreen() {
   const { user } = useAuth();
   const router = useRouter();
   const [cars, setCars] = useState<Car[]>([]);
+  const [runtime, setRuntime] = useState<ExtractionRuntime | null>(null);
   const [phase, setPhase] = useState<Phase>('pick');
   const [imageUris, setImageUris] = useState<string[]>([]);
   const [draft, setDraft] = useState<Partial<ChargingSession> | null>(null);
@@ -52,9 +60,18 @@ export default function CaptureSessionScreen() {
     }
   }, [user]);
 
+  const loadRuntime = useCallback(async () => {
+    try {
+      setRuntime(await resolveExtractionRuntime());
+    } catch {
+      setRuntime(null);
+    }
+  }, []);
+
   useEffect(() => {
     void loadCars();
-  }, [loadCars]);
+    void loadRuntime();
+  }, [loadCars, loadRuntime]);
 
   async function handlePick() {
     setError(null);
@@ -72,9 +89,9 @@ export default function CaptureSessionScreen() {
       setError('Pick at least one dashboard or receipt photo.');
       return;
     }
-    if (!isExtractionConfigured()) {
+    if (!(await isExtractionConfigured())) {
       setError(
-        'AI not configured. Add EXPO_PUBLIC_OPENAI_API_KEY and run `npm run extract-proxy`, or deploy the extract-session Edge Function.',
+        'AI not configured. Open Account → AI Settings, or run `npm run extract-proxy` / deploy the Edge Function.',
       );
       return;
     }
@@ -98,9 +115,16 @@ export default function CaptureSessionScreen() {
       setRawAi(result.raw);
       setConfidence(result.parsed.extraction_confidence);
       setPhase('review');
+      const engineLabel =
+        result.engine === 'edge'
+          ? 'Edge'
+          : result.engine === 'proxy'
+            ? 'proxy'
+            : result.provider;
       setInfo(
-        `Extracted with ${formatConfidence(result.parsed.extraction_confidence)} confidence. Review before saving.`,
+        `Extracted via ${engineLabel} with ${formatConfidence(result.parsed.extraction_confidence)} confidence. Review before saving.`,
       );
+      void loadRuntime();
     } catch (err) {
       setPhase('pick');
       setError(
@@ -126,6 +150,18 @@ export default function CaptureSessionScreen() {
         Upload 1–5 photos (dashboard before/after + charging app/receipt). AI
         fills the form for review.
       </Text>
+
+      <View style={styles.engineBox}>
+        <Text style={styles.engineLabel}>
+          Using {runtime?.label ?? '…'}
+        </Text>
+        <Text style={styles.engineDetail}>{runtime?.detail}</Text>
+        <Link href="/(app)/account/ai-settings" asChild>
+          <Pressable>
+            <Text style={styles.engineLink}>AI Settings</Text>
+          </Pressable>
+        </Link>
+      </View>
 
       <View style={styles.actions}>
         <PrimaryButton label="Choose photos" onPress={handlePick} />
@@ -227,6 +263,30 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     fontSize: 15,
     lineHeight: 22,
+  },
+  engineBox: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: 14,
+    borderWidth: 1,
+    gap: 4,
+    padding: 14,
+  },
+  engineLabel: {
+    color: colors.accent,
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  engineDetail: {
+    color: colors.textMuted,
+    fontSize: 13,
+    lineHeight: 18,
+  },
+  engineLink: {
+    color: colors.accent,
+    fontSize: 13,
+    fontWeight: '600',
+    marginTop: 4,
   },
   actions: {
     gap: 10,

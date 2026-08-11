@@ -231,6 +231,26 @@ export default function AccountScreen() {
           </View>
 
           <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Capture & data</Text>
+            <Link href="/(app)/account/ai-settings" asChild>
+              <Pressable style={styles.linkCard}>
+                <Text style={styles.linkTitle}>AI Settings</Text>
+                <Text style={styles.linkBody}>
+                  Preferred provider and on-device OpenAI / Claude keys.
+                </Text>
+              </Pressable>
+            </Link>
+            <Link href="/(app)/account/migrate" asChild>
+              <Pressable style={styles.linkCard}>
+                <Text style={styles.linkTitle}>Migrate from EVAi (legacy)</Text>
+                <Text style={styles.linkBody}>
+                  Import Excel or JSON exports from the original iOS app.
+                </Text>
+              </Pressable>
+            </Link>
+          </View>
+
+          <View style={styles.section}>
             <Text style={styles.sectionTitle}>Legal</Text>
             <Link href="/(app)/privacy" asChild>
               <Pressable style={styles.linkCard}>

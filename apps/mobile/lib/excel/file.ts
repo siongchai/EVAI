@@ -5,7 +5,11 @@ import * as Sharing from 'expo-sharing';
 
 export async function pickExcelFile(): Promise<ArrayBuffer | null> {
   if (Platform.OS === 'web') {
-    return pickExcelFileWeb();
+    return pickFileWeb({
+      accept:
+        '.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      as: 'arrayBuffer',
+    });
   }
 
   const result = await DocumentPicker.getDocumentAsync({
@@ -25,12 +29,73 @@ export async function pickExcelFile(): Promise<ArrayBuffer | null> {
   return response.arrayBuffer();
 }
 
-function pickExcelFileWeb(): Promise<ArrayBuffer | null> {
+export type MigratableFile =
+  | { kind: 'excel'; data: ArrayBuffer; name: string }
+  | { kind: 'json'; text: string; name: string };
+
+/** Pick an EVAi Excel (.xlsx) or Swift JSON export for migration. */
+export async function pickMigratableFile(): Promise<MigratableFile | null> {
+  if (Platform.OS === 'web') {
+    return pickMigratableFileWeb();
+  }
+
+  const result = await DocumentPicker.getDocumentAsync({
+    type: [
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      'application/vnd.ms-excel',
+      'application/json',
+      'text/json',
+      '*/*',
+    ],
+    copyToCacheDirectory: true,
+    multiple: false,
+  });
+
+  if (result.canceled || !result.assets?.[0]) return null;
+  const asset = result.assets[0];
+  const name = asset.name || 'export';
+  const lower = name.toLowerCase();
+
+  if (lower.endsWith('.json') || asset.mimeType?.includes('json')) {
+    const response = await fetch(asset.uri);
+    return { kind: 'json', text: await response.text(), name };
+  }
+
+  const response = await fetch(asset.uri);
+  return { kind: 'excel', data: await response.arrayBuffer(), name };
+}
+
+function pickMigratableFileWeb(): Promise<MigratableFile | null> {
   return new Promise((resolve) => {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept =
-      '.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+      '.xlsx,.json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/json';
+    input.onchange = async () => {
+      const file = input.files?.[0];
+      if (!file) {
+        resolve(null);
+        return;
+      }
+      const name = file.name || 'export';
+      if (name.toLowerCase().endsWith('.json') || file.type.includes('json')) {
+        resolve({ kind: 'json', text: await file.text(), name });
+        return;
+      }
+      resolve({ kind: 'excel', data: await file.arrayBuffer(), name });
+    };
+    input.click();
+  });
+}
+
+function pickFileWeb(options: {
+  accept: string;
+  as: 'arrayBuffer';
+}): Promise<ArrayBuffer | null> {
+  return new Promise((resolve) => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = options.accept;
     input.onchange = async () => {
       const file = input.files?.[0];
       if (!file) {

@@ -43,8 +43,11 @@ const corsHeaders = {
     'authorization, x-client-info, apikey, content-type',
 };
 
+type PreferredProvider = 'openai' | 'claude';
+
 type ExtractRequest = {
   imagesBase64: string[];
+  preferredProvider?: PreferredProvider;
 };
 
 function json(payload: unknown, status = 200) {
@@ -58,12 +61,22 @@ function isAnthropicKey(key: string) {
   return key.startsWith('sk-ant-');
 }
 
-function resolveApiKey() {
-  return (
-    Deno.env.get('ANTHROPIC_API_KEY') ||
-    Deno.env.get('OPENAI_API_KEY') ||
-    ''
-  );
+function resolveCredentials(preferred?: PreferredProvider): {
+  key: string;
+  provider: PreferredProvider | 'none';
+} {
+  const openai = Deno.env.get('OPENAI_API_KEY') || '';
+  const anthropic = Deno.env.get('ANTHROPIC_API_KEY') || '';
+
+  if (preferred === 'claude' && anthropic) {
+    return { key: anthropic, provider: 'claude' };
+  }
+  if (preferred === 'openai' && openai) {
+    return { key: openai, provider: 'openai' };
+  }
+  if (anthropic) return { key: anthropic, provider: 'claude' };
+  if (openai) return { key: openai, provider: 'openai' };
+  return { key: '', provider: 'none' };
 }
 
 function extractJsonObject(raw: string): string {
@@ -230,8 +243,13 @@ serve(async (req) => {
       return json({ error: 'Unauthorized' }, 401);
     }
 
-    const apiKey = resolveApiKey();
-    if (!apiKey) {
+    const body = (await req.json()) as ExtractRequest;
+    const preferred =
+      body.preferredProvider === 'claude' || body.preferredProvider === 'openai'
+        ? body.preferredProvider
+        : undefined;
+    const { key: apiKey, provider } = resolveCredentials(preferred);
+    if (!apiKey || provider === 'none') {
       return json(
         {
           error:
@@ -241,20 +259,20 @@ serve(async (req) => {
       );
     }
 
-    const body = (await req.json()) as ExtractRequest;
     const images = (body.imagesBase64 ?? []).filter(Boolean).slice(0, 5);
     if (images.length === 0) {
       return json({ error: 'At least one image is required' }, 400);
     }
 
-    const raw = isAnthropicKey(apiKey)
+    const useClaude = provider === 'claude' || isAnthropicKey(apiKey);
+    const raw = useClaude
       ? await extractWithClaude(apiKey, images)
       : await extractWithOpenAI(apiKey, images);
 
     return json({
       raw,
       user_id: user.id,
-      provider: isAnthropicKey(apiKey) ? 'claude' : 'openai',
+      provider: useClaude ? 'claude' : 'openai',
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Extraction failed';

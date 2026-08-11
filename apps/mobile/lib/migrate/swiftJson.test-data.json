@@ -1,0 +1,45 @@
+{
+  "app": "EVAi",
+  "exportedAt": "2026-08-01T10:00:00Z",
+  "sessionCount": 2,
+  "sessions": [
+    {
+      "id": "11111111-1111-1111-1111-111111111111",
+      "chargingLocation": "ORTO Punggol",
+      "chargerId": "CP-01",
+      "chargingNetwork": "ORTO",
+      "chargerType": "DC Fast Charger",
+      "chargerPowerKW": 60,
+      "startDate": "2026-07-15T08:00:00Z",
+      "endDate": "2026-07-15T08:35:00Z",
+      "startSOCPercent": 20,
+      "endSOCPercent": 80,
+      "odometerKM": 12340,
+      "energyKWh": 28.5,
+      "amountSGD": 18.9,
+      "sessionDuration": 2100,
+      "idleDuration": 120,
+      "carModel": "Hyundai Ioniq 5",
+      "extractionConfidence": 0.92
+    },
+    {
+      "id": "22222222-2222-2222-2222-222222222222",
+      "chargingLocation": "Shell Recharge Tampines",
+      "chargerId": "SH-12",
+      "chargingNetwork": "Shell Recharge",
+      "chargerType": "AC Charger",
+      "chargerPowerKW": 22,
+      "startDate": "2026-07-20T19:10:00Z",
+      "endDate": "2026-07-20T20:40:00Z",
+      "startSOCPercent": 35,
+      "endSOCPercent": 90,
+      "odometerKM": 12510,
+      "energyKWh": 32.1,
+      "amountSGD": 21.5,
+      "sessionDuration": 5400,
+      "idleDuration": 0,
+      "carModel": "Hyundai Ioniq 5",
+      "extractionConfidence": 0.88
+    }
+  ]
+}

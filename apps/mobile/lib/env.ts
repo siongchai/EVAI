@@ -4,6 +4,7 @@ type Extra = {
   supabaseUrl?: string;
   supabaseAnonKey?: string;
   openaiApiKey?: string;
+  anthropicApiKey?: string;
   useEdgeExtraction?: boolean | string;
   extractProxyUrl?: string;
 };
@@ -25,6 +26,8 @@ export const env = {
     process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY ?? extra.supabaseAnonKey ?? '',
   openaiApiKey:
     process.env.EXPO_PUBLIC_OPENAI_API_KEY ?? extra.openaiApiKey ?? '',
+  anthropicApiKey:
+    process.env.EXPO_PUBLIC_ANTHROPIC_API_KEY ?? extra.anthropicApiKey ?? '',
   useEdgeExtraction: truthy(
     process.env.EXPO_PUBLIC_USE_EDGE_EXTRACTION ?? extra.useEdgeExtraction,
   ),

@@ -87,15 +87,31 @@ function sendJson(res, status, payload) {
   res.end(body);
 }
 
-function resolveApiKey() {
-  const candidates = [
-    process.env.ANTHROPIC_API_KEY,
-    process.env.EXPO_PUBLIC_ANTHROPIC_API_KEY,
-    process.env.OPENAI_API_KEY,
-    process.env.EXPO_PUBLIC_OPENAI_API_KEY,
-  ].filter(Boolean);
+function resolveCredentials(preferred) {
+  const openai =
+    process.env.OPENAI_API_KEY ||
+    (process.env.EXPO_PUBLIC_OPENAI_API_KEY &&
+    !process.env.EXPO_PUBLIC_OPENAI_API_KEY.startsWith('sk-ant-')
+      ? process.env.EXPO_PUBLIC_OPENAI_API_KEY
+      : '') ||
+    '';
+  const anthropic =
+    process.env.ANTHROPIC_API_KEY ||
+    process.env.EXPO_PUBLIC_ANTHROPIC_API_KEY ||
+    (process.env.EXPO_PUBLIC_OPENAI_API_KEY?.startsWith('sk-ant-')
+      ? process.env.EXPO_PUBLIC_OPENAI_API_KEY
+      : '') ||
+    '';
 
-  return candidates[0] ?? '';
+  if (preferred === 'claude' && anthropic) {
+    return { key: anthropic, provider: 'claude' };
+  }
+  if (preferred === 'openai' && openai) {
+    return { key: openai, provider: 'openai' };
+  }
+  if (anthropic) return { key: anthropic, provider: 'claude' };
+  if (openai) return { key: openai, provider: 'openai' };
+  return { key: '', provider: 'none' };
 }
 
 function isAnthropicKey(key) {
@@ -250,10 +266,10 @@ const server = createServer(async (req, res) => {
   }
 
   if (req.method === 'GET' && req.url === '/health') {
-    const key = resolveApiKey();
+    const { key, provider } = resolveCredentials();
     sendJson(res, 200, {
       ok: true,
-      provider: key ? (isAnthropicKey(key) ? 'claude' : 'openai') : 'none',
+      provider: key ? provider : 'none',
     });
     return;
   }
@@ -273,8 +289,12 @@ const server = createServer(async (req, res) => {
       return;
     }
 
-    const apiKey = resolveApiKey();
-    if (!apiKey) {
+    const preferred =
+      body.preferredProvider === 'claude' || body.preferredProvider === 'openai'
+        ? body.preferredProvider
+        : undefined;
+    const { key: apiKey, provider } = resolveCredentials(preferred);
+    if (!apiKey || provider === 'none') {
       sendJson(res, 500, {
         error:
           'Missing API key in apps/mobile/.env. Set EXPO_PUBLIC_OPENAI_API_KEY (OpenAI sk-...) or EXPO_PUBLIC_ANTHROPIC_API_KEY / sk-ant-... key.',
@@ -282,13 +302,14 @@ const server = createServer(async (req, res) => {
       return;
     }
 
-    const raw = isAnthropicKey(apiKey)
+    const useClaude = provider === 'claude' || isAnthropicKey(apiKey);
+    const raw = useClaude
       ? await extractWithClaude(apiKey, images)
       : await extractWithOpenAI(apiKey, images);
 
     sendJson(res, 200, {
       raw,
-      provider: isAnthropicKey(apiKey) ? 'claude' : 'openai',
+      provider: useClaude ? 'claude' : 'openai',
     });
   } catch (error) {
     sendJson(res, 500, {
@@ -298,9 +319,8 @@ const server = createServer(async (req, res) => {
 });
 
 server.listen(PORT, () => {
-  const key = resolveApiKey();
-  const provider = !key ? 'none' : isAnthropicKey(key) ? 'claude' : 'openai';
+  const { key, provider } = resolveCredentials();
   console.log(`EVAi extract proxy listening on http://localhost:${PORT}`);
-  console.log(`Provider: ${provider}`);
+  console.log(`Provider: ${key ? provider : 'none'}`);
   console.log(`POST http://localhost:${PORT}/extract`);
 });

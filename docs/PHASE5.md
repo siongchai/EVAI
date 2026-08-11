@@ -125,4 +125,4 @@ Before App Store review, replace the contact line in `app/(app)/privacy.tsx` wit
 
 ## Next: Phase 6 (optional)
 
-Widgets, Apple Intelligence path, Swift→cloud migrate helper, push notifications, richer in-app AI provider settings.
+See [PHASE6.md](PHASE6.md): AI settings + Swift→cloud migrate helper (widgets / push / Apple Intelligence deferred).
