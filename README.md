@@ -15,7 +15,8 @@ AI-powered EV charging analytics.
 1. Phase 0: [docs/PHASE0.md](docs/PHASE0.md) — Auth + profiles  
 2. Phase 1: [docs/PHASE1.md](docs/PHASE1.md) — Account + cars  
 3. Phase 2: [docs/PHASE2.md](docs/PHASE2.md) — Sessions + Excel  
-4. Phase 3: [docs/PHASE3.md](docs/PHASE3.md) — Capture / AI extraction
+4. Phase 3: [docs/PHASE3.md](docs/PHASE3.md) — Capture / AI extraction  
+5. Phase 4: [docs/PHASE4.md](docs/PHASE4.md) — Home + Analytics
 3. Phase 2 setup: [docs/PHASE2.md](docs/PHASE2.md) (charging sessions + Excel)
 
 ```bash

@@ -1,47 +1,60 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
-  Image,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
 import { Link, Stack, useFocusEffect } from 'expo-router';
 
-import { ErrorText, PrimaryButton } from '@/components/ui';
+import { BarChart } from '@/components/analytics/BarChart';
+import { InsightList } from '@/components/analytics/InsightList';
+import { MetricGrid } from '@/components/analytics/MetricGrid';
+import { MonthPicker } from '@/components/analytics/MonthPicker';
+import { ErrorText } from '@/components/ui';
 import { colors } from '@/constants/theme';
-import { listCars } from '@/lib/cars';
+import { buildInsights } from '@/lib/analytics/insights';
+import {
+  currentYearMonth,
+  dailyCostPoints,
+  monthlyMetrics,
+  recentSessionsInMonth,
+} from '@/lib/analytics/metrics';
+import { formatSgd } from '@/lib/analytics/format';
 import { fetchProfile } from '@/lib/profile';
-import { listSessions } from '@/lib/sessions';
-import { publicStorageUrl } from '@/lib/storage';
+import {
+  formatDuration,
+  formatSessionWhen,
+  listSessions,
+} from '@/lib/sessions';
 import { useAuth } from '@/providers/AuthProvider';
-import type { Profile } from '@/types/database';
+import type { ChargingSession } from '@/types/database';
 
 export default function HomeScreen() {
-  const { user, signOut } = useAuth();
-  const [profile, setProfile] = useState<Profile | null>(null);
-  const [carCount, setCarCount] = useState(0);
-  const [sessionCount, setSessionCount] = useState(0);
-  const [error, setError] = useState<string | null>(null);
+  const { user } = useAuth();
+  const initial = currentYearMonth();
+  const [year, setYear] = useState(initial.year);
+  const [month, setMonth] = useState(initial.month);
+  const [sessions, setSessions] = useState<ChargingSession[]>([]);
+  const [greetingName, setGreetingName] = useState('');
   const [loading, setLoading] = useState(true);
-  const [signingOut, setSigningOut] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     if (!user) return;
     setLoading(true);
     setError(null);
     try {
-      const [nextProfile, cars, sessions] = await Promise.all([
+      const [profile, nextSessions] = await Promise.all([
         fetchProfile(user.id),
-        listCars(user.id),
         listSessions(user.id),
       ]);
-      setProfile(nextProfile);
-      setCarCount(cars.length);
-      setSessionCount(sessions.length);
+      setGreetingName(profile?.full_name?.trim() || 'there');
+      setSessions(nextSessions);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load account.');
+      setError(err instanceof Error ? err.message : 'Failed to load dashboard.');
     } finally {
       setLoading(false);
     }
@@ -53,183 +66,221 @@ export default function HomeScreen() {
     }, [load]),
   );
 
-  async function handleSignOut() {
-    setSigningOut(true);
-    setError(null);
-    try {
-      await signOut();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Sign out failed.');
-      setSigningOut(false);
-    }
-  }
+  const metrics = useMemo(
+    () => monthlyMetrics(sessions, year, month),
+    [sessions, year, month],
+  );
+  const daily = useMemo(
+    () => dailyCostPoints(sessions, year, month),
+    [sessions, year, month],
+  );
+  const insights = useMemo(
+    () => buildInsights(sessions, year, month, 2),
+    [sessions, year, month],
+  );
+  const recent = useMemo(
+    () => recentSessionsInMonth(sessions, year, month, 3),
+    [sessions, year, month],
+  );
 
-  const avatarUrl = publicStorageUrl('avatars', profile?.avatar_path);
+  // Sparkline: sample every few days so the chart stays readable
+  const sparkItems = useMemo(() => {
+    const step = daily.length > 16 ? 2 : 1;
+    return daily
+      .filter((_, index) => index % step === 0 || index === daily.length - 1)
+      .map((point) => ({
+        key: String(point.day),
+        label: String(point.day),
+        value: point.cost,
+      }));
+  }, [daily]);
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      style={styles.scroll}
+      contentContainerStyle={styles.content}
+      keyboardShouldPersistTaps="handled"
+    >
       <Stack.Screen options={{ title: 'Home' }} />
+
       <Text style={styles.brand}>EVAi</Text>
-      <Text style={styles.title}>Account ready</Text>
-      <Text style={styles.body}>
-        Manage your profile, vehicles, and charging sessions — or capture a
-        receipt with AI.
-      </Text>
+      <Text style={styles.greeting}>Hi {greetingName}</Text>
+      <Text style={styles.subtitle}>Your charging overview</Text>
+
+      <MonthPicker
+        year={year}
+        month={month}
+        onChange={(nextYear, nextMonth) => {
+          setYear(nextYear);
+          setMonth(nextMonth);
+        }}
+      />
 
       {loading ? (
-        <ActivityIndicator color={colors.accent} />
+        <ActivityIndicator color={colors.accent} style={styles.loader} />
       ) : (
-        <View style={styles.card}>
-          <View style={styles.row}>
-            {avatarUrl ? (
-              <Image source={{ uri: avatarUrl }} style={styles.avatar} />
-            ) : (
-              <View style={[styles.avatar, styles.avatarPlaceholder]}>
-                <Text style={styles.avatarLetter}>
-                  {(profile?.full_name || user?.email || '?')
-                    .charAt(0)
-                    .toUpperCase()}
-                </Text>
-              </View>
-            )}
-            <View style={styles.meta}>
-              <Text style={styles.value}>{profile?.full_name || 'Unnamed'}</Text>
-              <Text style={styles.label}>{user?.email}</Text>
-              <Text style={styles.label}>
-                {carCount} {carCount === 1 ? 'car' : 'cars'} · {sessionCount}{' '}
-                {sessionCount === 1 ? 'session' : 'sessions'}
-              </Text>
+        <>
+          <MetricGrid metrics={metrics} />
+
+          <BarChart
+            title="Daily cost"
+            items={sparkItems}
+            emptyLabel="No charging cost this month yet."
+            valueFormatter={(value) => (value > 0 ? value.toFixed(0) : '')}
+          />
+
+          <InsightList insights={insights} />
+
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>Recent sessions</Text>
+              <Link href="/(app)/sessions" asChild>
+                <Pressable>
+                  <Text style={styles.link}>See all</Text>
+                </Pressable>
+              </Link>
             </View>
+            {recent.length === 0 ? (
+              <Text style={styles.empty}>No sessions in this month.</Text>
+            ) : (
+              recent.map((session) => (
+                <Link
+                  key={session.id}
+                  href={`/(app)/sessions/${session.id}`}
+                  asChild
+                >
+                  <Pressable style={styles.sessionCard}>
+                    <Text style={styles.sessionTitle}>
+                      {session.charging_location || 'Untitled session'}
+                    </Text>
+                    <Text style={styles.sessionMeta}>
+                      {formatSessionWhen(session.start_date)} ·{' '}
+                      {formatSgd(session.amount_sgd)} ·{' '}
+                      {formatDuration(session.session_duration_seconds)}
+                    </Text>
+                  </Pressable>
+                </Link>
+              ))
+            )}
           </View>
-        </View>
+
+          <View style={styles.navRow}>
+            <Link href="/(app)/analytics" asChild>
+              <Pressable style={styles.navChip}>
+                <Text style={styles.navChipText}>Analytics</Text>
+              </Pressable>
+            </Link>
+            <Link href="/(app)/sessions/capture" asChild>
+              <Pressable style={styles.navChip}>
+                <Text style={styles.navChipText}>Capture</Text>
+              </Pressable>
+            </Link>
+            <Link href="/(app)/sessions" asChild>
+              <Pressable style={styles.navChip}>
+                <Text style={styles.navChipText}>Sessions</Text>
+              </Pressable>
+            </Link>
+            <Link href="/(app)/cars" asChild>
+              <Pressable style={styles.navChip}>
+                <Text style={styles.navChipText}>Cars</Text>
+              </Pressable>
+            </Link>
+            <Link href="/(app)/account" asChild>
+              <Pressable style={styles.navChip}>
+                <Text style={styles.navChipText}>Account</Text>
+              </Pressable>
+            </Link>
+          </View>
+        </>
       )}
 
-      <Link href="/(app)/account" asChild>
-        <Pressable style={styles.navCard}>
-          <Text style={styles.navTitle}>Account</Text>
-          <Text style={styles.navBody}>
-            Edit name, avatar, password, or delete account.
-          </Text>
-        </Pressable>
-      </Link>
-
-      <Link href="/(app)/cars" asChild>
-        <Pressable style={styles.navCard}>
-          <Text style={styles.navTitle}>Cars</Text>
-          <Text style={styles.navBody}>
-            Add and manage the EVs on your account.
-          </Text>
-        </Pressable>
-      </Link>
-
-      <Link href="/(app)/sessions" asChild>
-        <Pressable style={styles.navCard}>
-          <Text style={styles.navTitle}>Sessions</Text>
-          <Text style={styles.navBody}>
-            List, edit, and sync charging logs via Excel import/export.
-          </Text>
-        </Pressable>
-      </Link>
-
-      <Link href="/(app)/sessions/capture" asChild>
-        <Pressable style={styles.navCard}>
-          <Text style={styles.navTitle}>Capture</Text>
-          <Text style={styles.navBody}>
-            Upload dashboard and receipt photos — AI drafts a session to review.
-          </Text>
-        </Pressable>
-      </Link>
-
       <ErrorText message={error} />
-
-      <PrimaryButton
-        label="Sign out"
-        tone="muted"
-        loading={signingOut}
-        onPress={handleSignOut}
-      />
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  scroll: {
     backgroundColor: colors.background,
     flex: 1,
+  },
+  content: {
     gap: 16,
     padding: 24,
+    paddingBottom: 48,
   },
   brand: {
     color: colors.accent,
-    fontSize: 36,
+    fontSize: 32,
     fontWeight: '800',
   },
-  title: {
+  greeting: {
     color: colors.text,
     fontSize: 24,
     fontWeight: '700',
   },
-  body: {
+  subtitle: {
     color: colors.textMuted,
-    fontSize: 16,
-    lineHeight: 24,
+    fontSize: 15,
+    marginBottom: 4,
   },
-  card: {
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: 16,
-    borderWidth: 1,
-    padding: 16,
+  loader: {
+    marginTop: 24,
   },
-  row: {
+  section: {
+    gap: 10,
+  },
+  sectionHeader: {
     alignItems: 'center',
     flexDirection: 'row',
-    gap: 14,
+    justifyContent: 'space-between',
   },
-  avatar: {
-    borderRadius: 28,
-    height: 56,
-    width: 56,
-  },
-  avatarPlaceholder: {
-    alignItems: 'center',
-    backgroundColor: colors.surfaceElevated,
-    justifyContent: 'center',
-  },
-  avatarLetter: {
+  sectionTitle: {
     color: colors.text,
-    fontSize: 22,
+    fontSize: 16,
     fontWeight: '700',
   },
-  meta: {
-    flex: 1,
-    gap: 4,
+  link: {
+    color: colors.accent,
+    fontWeight: '700',
   },
-  label: {
+  empty: {
     color: colors.textMuted,
-    fontSize: 14,
   },
-  value: {
-    color: colors.text,
-    fontSize: 18,
-    fontWeight: '700',
-  },
-  navCard: {
+  sessionCard: {
     backgroundColor: colors.surface,
     borderColor: colors.border,
-    borderRadius: 16,
+    borderRadius: 12,
     borderWidth: 1,
-    gap: 6,
-    padding: 16,
+    gap: 4,
+    padding: 14,
   },
-  navTitle: {
-    color: colors.accent,
-    fontSize: 18,
+  sessionTitle: {
+    color: colors.text,
+    fontSize: 15,
     fontWeight: '700',
   },
-  navBody: {
+  sessionMeta: {
     color: colors.textMuted,
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: 13,
+  },
+  navRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+    marginTop: 8,
+  },
+  navChip: {
+    backgroundColor: colors.surfaceElevated,
+    borderColor: colors.border,
+    borderRadius: 999,
+    borderWidth: 1,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+  },
+  navChipText: {
+    color: colors.text,
+    fontSize: 13,
+    fontWeight: '600',
   },
 });

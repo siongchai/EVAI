@@ -99,4 +99,4 @@ OCR fusion, Apple Intelligence, PDF import, offline queue, Claude provider UI.
 
 ## Next: Phase 4
 
-Home dashboard + analytics charts/insights.
+See [PHASE4.md](PHASE4.md) — Home dashboard + analytics charts/insights.
