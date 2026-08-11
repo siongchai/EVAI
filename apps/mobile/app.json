@@ -8,9 +8,37 @@
     "scheme": "evai",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "primaryColor": "#00A3FF",
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "sg.tsc.EVAi2"
+      "bundleIdentifier": "sg.tsc.EVAi2",
+      "buildNumber": "1",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "EVAi needs photo access to upload charging receipts, dashboard screenshots, profile photos, and car photos.",
+        "NSCameraUsageDescription": "EVAi can use the camera to capture charging receipts and dashboard screenshots.",
+        "NSPhotoLibraryAddUsageDescription": "EVAi may save exported files or images when you choose to share them.",
+        "ITSAppUsesNonExemptEncryption": false
+      },
+      "privacyManifests": {
+        "NSPrivacyAccessedAPITypes": [
+          {
+            "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryUserDefaults",
+            "NSPrivacyAccessedAPITypeReasons": ["CA92.1"]
+          },
+          {
+            "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryFileTimestamp",
+            "NSPrivacyAccessedAPITypeReasons": ["C617.1"]
+          },
+          {
+            "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategorySystemBootTime",
+            "NSPrivacyAccessedAPITypeReasons": ["35F9.1"]
+          },
+          {
+            "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryDiskSpace",
+            "NSPrivacyAccessedAPITypeReasons": ["E174.1"]
+          }
+        ]
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -20,12 +48,24 @@
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
       "package": "sg.tsc.evai2",
-      "predictiveBackGestureEnabled": false
+      "versionCode": 1,
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.READ_MEDIA_IMAGES",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE"
+      ]
     },
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "name": "EVAi",
+      "shortName": "EVAi",
+      "description": "AI-powered EV charging analytics",
+      "themeColor": "#0B1C2C",
+      "backgroundColor": "#0B1C2C"
     },
     "plugins": [
       "expo-router",
@@ -33,9 +73,11 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "Allow EVAi to access your photos for profile and car images."
+          "photosPermission": "Allow EVAi to access your photos for charging receipts, dashboard screenshots, profile photos, and car images.",
+          "cameraPermission": "Allow EVAi to use the camera to capture charging receipts and dashboard screenshots."
         }
       ],
+      "expo-document-picker",
       "expo-sharing"
     ],
     "experiments": {

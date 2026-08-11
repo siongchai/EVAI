@@ -190,6 +190,11 @@ export default function HomeScreen() {
                 <Text style={styles.navChipText}>Account</Text>
               </Pressable>
             </Link>
+            <Link href="/(app)/privacy" asChild>
+              <Pressable style={styles.navChip}>
+                <Text style={styles.navChipText}>Privacy</Text>
+              </Pressable>
+            </Link>
           </View>
         </>
       )}

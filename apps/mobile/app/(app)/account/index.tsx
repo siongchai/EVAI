@@ -231,6 +231,18 @@ export default function AccountScreen() {
           </View>
 
           <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Legal</Text>
+            <Link href="/(app)/privacy" asChild>
+              <Pressable style={styles.linkCard}>
+                <Text style={styles.linkTitle}>Privacy</Text>
+                <Text style={styles.linkBody}>
+                  How EVAi stores account, charging, and capture data.
+                </Text>
+              </Pressable>
+            </Link>
+          </View>
+
+          <View style={styles.section}>
             <Text style={styles.sectionTitle}>Security</Text>
             <Field
               label="New password"

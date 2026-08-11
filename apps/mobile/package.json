@@ -10,7 +10,8 @@
     "web": "expo start --web",
     "extract-proxy": "node ./scripts/extract-proxy.mjs",
     "export:web": "expo export --platform web",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "ship:check": "npm run typecheck && npm run export:web"
   },
   "dependencies": {
     "@expo/metro-runtime": "~57.0.8",

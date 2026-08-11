@@ -54,4 +54,4 @@ Hourly heatmap, SOC/battery charts, quarterly trends, full InsightEngine suite, 
 
 ## Next: Phase 5
 
-Ship — Vercel web deploy, EAS iOS/Android builds, store/privacy polish.
+See [PHASE5.md](PHASE5.md) — Vercel web deploy, EAS iOS/Android builds, store/privacy polish.
