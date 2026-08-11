@@ -63,4 +63,4 @@ Signed in as your test user:
 
 ## Next: Phase 3
 
-Receipt/capture extraction (photo → session draft).
+See [PHASE3.md](PHASE3.md) — receipt/capture extraction (photo → session draft).

@@ -146,7 +146,12 @@ export default function SessionsScreen() {
               <ErrorText message={error} />
               <SuccessText message={message} />
               <PrimaryButton
-                label="Add session"
+                label="Capture with AI"
+                onPress={() => router.push('/(app)/sessions/capture')}
+              />
+              <PrimaryButton
+                label="Add session manually"
+                tone="muted"
                 onPress={() => router.push('/(app)/sessions/new')}
               />
               <PrimaryButton
@@ -166,7 +171,8 @@ export default function SessionsScreen() {
           }
           ListEmptyComponent={
             <Text style={styles.empty}>
-              No charging sessions yet. Add one manually or import an Excel log.
+              No charging sessions yet. Capture from photos, add manually, or
+              import an Excel log.
             </Text>
           }
           renderItem={({ item }) => (

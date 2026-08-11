@@ -1,7 +1,9 @@
 import { getSupabase } from '@/lib/supabase';
 
+export type StorageBucket = 'avatars' | 'cars' | 'session-photos';
+
 export function publicStorageUrl(
-  bucket: 'avatars' | 'cars',
+  bucket: StorageBucket,
   path: string | null | undefined,
 ): string | null {
   if (!path) return null;
@@ -10,7 +12,7 @@ export function publicStorageUrl(
 }
 
 export async function uploadUserImage(options: {
-  bucket: 'avatars' | 'cars';
+  bucket: StorageBucket;
   userId: string;
   fileName: string;
   uri: string;
@@ -37,8 +39,27 @@ export async function uploadUserImage(options: {
   return path;
 }
 
+export async function uploadSessionPhotos(options: {
+  userId: string;
+  captureId: string;
+  uris: string[];
+}): Promise<string[]> {
+  const paths: string[] = [];
+  for (let i = 0; i < options.uris.length; i += 1) {
+    const uri = options.uris[i]!;
+    const path = await uploadUserImage({
+      bucket: 'session-photos',
+      userId: options.userId,
+      fileName: `captures/${options.captureId}/${String(i + 1).padStart(2, '0')}`,
+      uri,
+    });
+    paths.push(path);
+  }
+  return paths;
+}
+
 export async function deleteStoragePath(
-  bucket: 'avatars' | 'cars',
+  bucket: StorageBucket,
   path: string | null | undefined,
 ): Promise<void> {
   if (!path) return;

@@ -72,7 +72,8 @@ export default function HomeScreen() {
       <Text style={styles.brand}>EVAi</Text>
       <Text style={styles.title}>Account ready</Text>
       <Text style={styles.body}>
-        Manage your profile, vehicles, and charging sessions. Capture comes next.
+        Manage your profile, vehicles, and charging sessions — or capture a
+        receipt with AI.
       </Text>
 
       {loading ? (
@@ -126,6 +127,15 @@ export default function HomeScreen() {
           <Text style={styles.navTitle}>Sessions</Text>
           <Text style={styles.navBody}>
             List, edit, and sync charging logs via Excel import/export.
+          </Text>
+        </Pressable>
+      </Link>
+
+      <Link href="/(app)/sessions/capture" asChild>
+        <Pressable style={styles.navCard}>
+          <Text style={styles.navTitle}>Capture</Text>
+          <Text style={styles.navBody}>
+            Upload dashboard and receipt photos — AI drafts a session to review.
           </Text>
         </Pressable>
       </Link>
